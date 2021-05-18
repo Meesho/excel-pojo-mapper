@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 public class Helper {
 
+
     public static String fieldType(String string) {
         String arrStr = "";
         String baseStr = "";
@@ -29,6 +30,7 @@ public class Helper {
         }
         return baseStr + arrStr;
     }
+
 
     public enum ArrayValue {
         IntegerValueArray {

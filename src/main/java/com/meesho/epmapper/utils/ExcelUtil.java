@@ -101,6 +101,10 @@ public class ExcelUtil {
         return cell.getStringCellValue().split(delimeter);
     }
 
+    /**
+     * @param cell
+     * @return true if cell is not blank
+     */
     public static boolean checkIfCellIsNotBlank(Cell cell) {
         return Optional.ofNullable(cell).filter(rowCell -> StringUtils.isNotBlank(rowCell.toString())).map(Cell::getCellType).filter(cellType -> cellType != CellType.BLANK).isPresent();
     }
@@ -110,6 +114,10 @@ public class ExcelUtil {
         return cells;
     }
 
+    /**
+     * @param row
+     * @return true if row is empty
+     */
     public static boolean checkIfRowIsEmpty(Row row) {
         if (row == null) {
             return true;

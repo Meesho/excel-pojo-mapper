@@ -34,7 +34,7 @@ public class ExcelToPojo {
      */
     public Object getPojo(int startIndex, int endIndex) {
         dataHandler.createTestDataStructure(startIndex, endIndex, sheet);
-        Object object = mapping(0);
+        Object object = mapping();
         boolean isListObject = Optional.ofNullable(object).filter(listObject -> listObject instanceof List).isPresent();
         if (isListObject)
             object = arrayHandle(Utils.castToList(object));
@@ -46,19 +46,18 @@ public class ExcelToPojo {
      */
     public Map<String, List<Integer[]>> getDataForKey() {
         Map<String, List<Integer>> dataInfo = dataHandler.getDataInfo(sheet);
-        Map<String, List<Integer[]>> testDataInfo = dataHandler.getDataInfoForKey(dataInfo, sheet);
-        return testDataInfo;
+        return dataHandler.getDataInfoForKey(dataInfo, sheet);
     }
 
 
     /**
      * Mapping excel data with java objects
-     * @param rootIndex
-     * @return
+     *
+     * @return mapped data object
      */
-    private Object mapping(int rootIndex) {
+    private Object mapping() {
         mapper.setMapperData(dataHandler.getTestDataList(), dataHandler.getDataList(), objectList, fieldObjectMap);
-        return mapper.mapping(rootIndex);
+        return mapper.mapping(0);
     }
 
     private Object arrayHandle(List<Object> list) {
