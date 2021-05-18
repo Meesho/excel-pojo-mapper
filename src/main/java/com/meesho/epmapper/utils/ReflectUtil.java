@@ -37,7 +37,7 @@ public final class ReflectUtil {
         return obj;
     }
 
-    public static Field getField(Class<?> c,String name){
+    public static Field getField(Class<?> c, String name) {
         Field field = null;
         try {
             field = c.getDeclaredField(name);
@@ -50,7 +50,7 @@ public final class ReflectUtil {
         return field;
     }
 
-    public static Class<?> getClassByName(String className){
+    public static Class<?> getClassByName(String className) {
         Class<?> c = null;
         try {
             c = Class.forName(className);
@@ -63,17 +63,17 @@ public final class ReflectUtil {
     public static void setFieldData(Field field, Object o, Object value) {
         try {
             field.setAccessible(true);
-            field.set(o,value);
+            field.set(o, value);
         } catch (IllegalAccessException e) {
             throw new IllegalCastException("Unexpected cast type {" + value + "} of field" + field.getName());
         }
     }
 
-    public static void setArrayField(Field field,Object o, List<Object> value){
-        Object[] array = Utils.convertListToArray(field.getType().getComponentType(),value);
+    public static void setArrayField(Field field, Object o, List<Object> value) {
+        Object[] array = Utils.convertListToArray(field.getType().getComponentType(), value);
         try {
             field.setAccessible(true);
-            field.set(o,array);
+            field.set(o, array);
         } catch (IllegalAccessException e) {
             throw new IllegalCastException("Unexpected cast type {" + value + "} of field" + field.getName());
         }

@@ -20,15 +20,14 @@ import java.util.stream.IntStream;
 
 public class ExcelUtil {
 
-    private static XSSFSheet sheet;
     private static final int headerRowNo = 0;
     private static final int dataTypeRowNo = 1;
-
+    private static XSSFSheet sheet;
 
     /**
      * @param sheet
      */
-    public static void setSheet(XSSFSheet sheet){
+    public static void setSheet(XSSFSheet sheet) {
         ExcelUtil.sheet = sheet;
     }
 
@@ -36,28 +35,28 @@ public class ExcelUtil {
      * @param excelLocation Location of Excel sheet
      * @return FileInputStream
      */
-    public static FileInputStream getExcelFileStream(String excelLocation){
+    public static FileInputStream getExcelFileStream(String excelLocation) {
         FileInputStream file = null;
         try {
             file = new FileInputStream(new File(excelLocation));
         } catch (FileNotFoundException e) {
-            throw new EpmapperInstantiationException("File not found in location: "+excelLocation,e.getCause());
+            throw new EpmapperInstantiationException("File not found in location: " + excelLocation, e.getCause());
         }
         return file;
     }
 
     /**
-     * @param file FileInputStream for excel
+     * @param file      FileInputStream for excel
      * @param sheetName Name of sheet in excel
      * @return sheet
      */
-    public static XSSFSheet getSheet(FileInputStream file,String sheetName){
+    public static XSSFSheet getSheet(FileInputStream file, String sheetName) {
 
         XSSFWorkbook workbook = null;
         try {
             workbook = new XSSFWorkbook(file);
         } catch (IOException e) {
-            throw new EpmapperInstantiationException("Can not open file to read, check file extension",e.getCause());
+            throw new EpmapperInstantiationException("Can not open file to read, check file extension", e.getCause());
         }
         return workbook.getSheet(sheetName);
     }
@@ -102,15 +101,28 @@ public class ExcelUtil {
         return cell.getStringCellValue().split(delimeter);
     }
 
-    public static boolean checkIfCellIsNotBlank(Cell cell){
+    public static boolean checkIfCellIsNotBlank(Cell cell) {
         return Optional.ofNullable(cell).filter(rowCell -> StringUtils.isNotBlank(rowCell.toString())).map(Cell::getCellType).filter(cellType -> cellType != CellType.BLANK).isPresent();
     }
 
-    public static List<Cell> getNonEmptyCell(Row row){
+    public static List<Cell> getNonEmptyCell(Row row) {
         List<Cell> cells = IntStream.rangeClosed(row.getFirstCellNum(), row.getLastCellNum()).mapToObj(row::getCell).filter(ExcelUtil::checkIfCellIsNotBlank).collect(Collectors.toList());
         return cells;
     }
-    public static boolean checkIfRowIsNotEmpty(Row row) {
-        return Optional.ofNullable(row).map(ExcelUtil::getNonEmptyCell).filter(nonEmptyCell -> nonEmptyCell.size()>0).isPresent();
+
+    public static boolean checkIfRowIsEmpty(Row row) {
+        if (row == null) {
+            return true;
+        }
+        if (row.getLastCellNum() <= 0) {
+            return true;
+        }
+        for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+            Cell cell = row.getCell(cellNum);
+            if (cell != null && cell.getCellType() != CellType.BLANK && StringUtils.isNotBlank(cell.toString())) {
+                return false;
+            }
+        }
+        return true;
     }
 }

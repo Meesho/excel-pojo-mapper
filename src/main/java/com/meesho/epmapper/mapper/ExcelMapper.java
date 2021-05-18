@@ -18,7 +18,7 @@ public class ExcelMapper {
     private static final String v2 = String.valueOf(Long.MAX_VALUE);
     private static final String v3 = String.valueOf(Double.MAX_VALUE);
     private static final String rootString = System.getProperty("rootPackage");
-    private static final String rootArrayString = "[L"+rootString;
+    private static final String rootArrayString = "[L" + rootString;
     private List<TestData> testDataList;
     private List<List<RowData>> dataList;
     private List<Object> objectList;
@@ -55,33 +55,33 @@ public class ExcelMapper {
                                 list.add(instance);
                                 langProcessCount++;
                             }
-                            Object object = getObjectIfSizeIsExhausted(size,langProcessCount,dataCount,list,instance);
-                            set(object,field, map, fieldName, type);
+                            Object object = getObjectIfSizeIsExhausted(size, langProcessCount, dataCount, list, instance);
+                            set(object, field, map, fieldName, type);
                         } else if (fields.get(fieldName).startsWith(rootString)) {
                             rootIndex = getIndexOfTestData(fields.get(fieldName));
-                            SingletonMap<Integer,List<Object>> tempMap = setInitialRootStringField(size,rootStringProcessCount,rootIndex,dataCount,list,field);
+                            SingletonMap<Integer, List<Object>> tempMap = setInitialRootStringField(size, rootStringProcessCount, rootIndex, dataCount, list, field);
                             rootStringProcessCount = tempMap.getKey();
                             List<Object> unhandled = tempMap.getValue();
-                            setRemainingRootStringField(size,rootIndex,dataCount,field,list,unhandled);
-                            if(size<=1) {
+                            setRemainingRootStringField(size, rootIndex, dataCount, field, list, unhandled);
+                            if (size <= 1) {
                                 ReflectUtil.setFieldData(field, instance, mapping(rootIndex));
                             }
                         } else if (fields.get(fieldName).startsWith(rootArrayString)) {
-                            setRootArrayStringField(fields,fieldName,field,list,instance);
+                            setRootArrayStringField(fields, fieldName, field, list, instance);
                         }
                     }
                 }
             } else {
-                arrList = processRemainingData(fields,field,fieldName,instance);
+                arrList = processRemainingData(fields, field, fieldName, instance);
             }
         }
         return getNonNullObject(list, arrList, instance);
     }
 
 
-    private Object setInitialLangField(Class<?> instanceClass,HashMap<String, Object> map,Object instance,Field field,String type,String fieldName){
+    private Object setInitialLangField(Class<?> instanceClass, HashMap<String, Object> map, Object instance, Field field, String type, String fieldName) {
         instance = ReflectUtil.newInstanceOf(instanceClass);
-        if (isEnd(fieldName,map)) {
+        if (isEnd(fieldName, map)) {
             ReflectUtil.setFieldData(field, instance, Helper.Value.valueOf(type).maxValue());
         } else {
             ReflectUtil.setFieldData(field, instance, map.get(fieldName));
@@ -89,7 +89,7 @@ public class ExcelMapper {
         return instance;
     }
 
-    private SingletonMap<Integer,List<Object>> setInitialRootStringField(int size,int rootStringProcessCount,int rootIndex,int dataCount,List<Object> list,Field field){
+    private SingletonMap<Integer, List<Object>> setInitialRootStringField(int size, int rootStringProcessCount, int rootIndex, int dataCount, List<Object> list, Field field) {
         List<Object> unhandled = new ArrayList<>();
         if (size > 1 && rootStringProcessCount < size) {
             List<?> rootList = (List<?>) mapping(rootIndex);
@@ -105,10 +105,10 @@ public class ExcelMapper {
                 rootStringProcessCount++;
             }
         }
-        return new SingletonMap<>(rootStringProcessCount,unhandled);
+        return new SingletonMap<>(rootStringProcessCount, unhandled);
     }
 
-    private void setRemainingRootStringField(int size,int rootIndex,int dataCount,Field field,List<Object> list,List<Object> unhandled){
+    private void setRemainingRootStringField(int size, int rootIndex, int dataCount, Field field, List<Object> list, List<Object> unhandled) {
         if (size > 1) {
             Object mappedObject = mapping(rootIndex);
             if (mappedObject instanceof ArrayList) {
@@ -120,7 +120,7 @@ public class ExcelMapper {
         }
     }
 
-    private void setRootArrayStringField(LinkedHashMap<String, String> fields,String fieldName,Field field,List<Object> list,Object instance){
+    private void setRootArrayStringField(LinkedHashMap<String, String> fields, String fieldName, Field field, List<Object> list, Object instance) {
         List<Object> mappedList = new ArrayList<>();
         String clName = fields.get(fieldName).replace("[L", "");
         int rootIndex = getIndexOfTestData(clName);
@@ -141,7 +141,7 @@ public class ExcelMapper {
         }
     }
 
-    private Object getObjectIfSizeIsExhausted(int size,int langProcessCount,int dataCount,List<Object> list,Object instance){
+    private Object getObjectIfSizeIsExhausted(int size, int langProcessCount, int dataCount, List<Object> list, Object instance) {
         if (size > 1 && langProcessCount >= size) {
             return list.get(dataCount);
         } else {
@@ -149,7 +149,7 @@ public class ExcelMapper {
         }
     }
 
-    private Object processRemainingData(LinkedHashMap<String, String> fields,Field field,String fieldName,Object instance){
+    private Object processRemainingData(LinkedHashMap<String, String> fields, Field field, String fieldName, Object instance) {
         int rootIndex = getIndexOfTestData(fields.get(fieldName).replace("[L", ""));
         fieldObjectMap.put(field, instance);
         Object arrList = mapping(rootIndex);
@@ -157,7 +157,7 @@ public class ExcelMapper {
             if (!(arrList instanceof ArrayList)) {
                 objectList.add(arrList);
                 if (objectList.size() > 0) {
-                    ReflectUtil.setArrayField(field,instance,objectList);
+                    ReflectUtil.setArrayField(field, instance, objectList);
                 }
             } else {
                 setFieldValue(Utils.castToList(arrList), instance, field);
@@ -203,14 +203,14 @@ public class ExcelMapper {
 
     private void getList(List<Object> rootSubList, List<Object> tempList, Field field) {
         if (!field.getType().getName().contains("List")) {
-            tempList.add(Utils.convertListToArray(field.getType().getComponentType(),rootSubList));
+            tempList.add(Utils.convertListToArray(field.getType().getComponentType(), rootSubList));
         } else {
             tempList.add(rootSubList);
         }
     }
 
     private void setFieldValueForList(List<Object> mappedList, List<Object> list, Field field) {
-        IntStream.range(0,list.size()).filter(listIndex -> listIndex< mappedList.size()).forEach(index -> {
+        IntStream.range(0, list.size()).filter(listIndex -> listIndex < mappedList.size()).forEach(index -> {
             if (!Utils.contentIsObjectArray(mappedList)) {
                 ReflectUtil.setFieldData(field, list.get(index), new ArrayList<>(Utils.getListOfList(mappedList).get(index)));
             } else {
@@ -221,22 +221,22 @@ public class ExcelMapper {
 
     private void setFieldValue(List<Object> rootList, Object instance, Field field) {
         if (!field.getGenericType().getTypeName().contains("List")) {
-            ReflectUtil.setArrayField(field,instance,rootList);
+            ReflectUtil.setArrayField(field, instance, rootList);
         } else {
             ReflectUtil.setFieldData(field, instance, rootList);
         }
     }
 
     private void setFieldValue(List<Object> mappedList, List<Object> list, Field field) {
-        IntStream.range(0,list.size()).filter(listIndex -> listIndex< mappedList.size()).forEach(index -> ReflectUtil.setFieldData(field, list.get(index), mappedList.get(index)));
+        IntStream.range(0, list.size()).filter(listIndex -> listIndex < mappedList.size()).forEach(index -> ReflectUtil.setFieldData(field, list.get(index), mappedList.get(index)));
     }
 
     private List<Object> getObjectListByIndexList(List<Integer> indexes, List<?> rootList) {
-        return IntStream.range(0,indexes.size()).mapToObj(mappingIndex -> rootList.get(indexes.get(mappingIndex) - 1)).collect(Collectors.toList());
+        return IntStream.range(0, indexes.size()).mapToObj(mappingIndex -> rootList.get(indexes.get(mappingIndex) - 1)).collect(Collectors.toList());
     }
 
     private List<Integer> filterEndIndexes(List<?> objectList) {
-        return IntStream.range(0,objectList.size()).filter(i -> isEnd(objectList.get(i).toString())).boxed().collect(Collectors.toList());
+        return IntStream.range(0, objectList.size()).filter(i -> isEnd(objectList.get(i).toString())).boxed().collect(Collectors.toList());
     }
 
     private boolean isEnd(String str) {
@@ -244,7 +244,7 @@ public class ExcelMapper {
     }
 
     private int getIndexOfTestData(String str) {
-        OptionalInt index = IntStream.range(0,testDataList.size()).filter(i -> testDataList.get(i).className.contains(str)).findFirst();
+        OptionalInt index = IntStream.range(0, testDataList.size()).filter(i -> testDataList.get(i).className.contains(str)).findFirst();
         return index.orElse(-1);
     }
 
