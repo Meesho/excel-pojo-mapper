@@ -1,6 +1,7 @@
 package com.meesho.epmapper;
 
 import com.meesho.epmapper.mapper.ExcelToPojo;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,9 @@ public class ExcelObjectMapper {
         return this;
     }
 
-    public Object getData(String key){
+    public List<Object> getData(String key){
+        if (StringUtils.isNotBlank(rootPackage))
+        System.setProperty("rootPackage",rootPackage);
         List<Object> lines = new ArrayList<Object>();
         ExcelToPojo excelToPojo = new ExcelToPojo(fileLocation,sheetName);
         List<Integer[]> dataInfo = excelToPojo.getDataForKey().get(key);

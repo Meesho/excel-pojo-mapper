@@ -40,6 +40,7 @@ public class DataHandler {
      * @param sheet
      */
     public void createTestDataStructure(int start, int end, XSSFSheet sheet) {
+        dataList = new ArrayList<>();
         int i = 1;
         while (i < getLastCellInDataTypeRow()) {
             testData = new TestData();

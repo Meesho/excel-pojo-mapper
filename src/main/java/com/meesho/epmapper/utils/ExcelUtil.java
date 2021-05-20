@@ -9,10 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +20,7 @@ public class ExcelUtil {
     private static final int headerRowNo = 0;
     private static final int dataTypeRowNo = 1;
     private static XSSFSheet sheet;
+    private static XSSFWorkbook template;
 
     /**
      * @param sheet
@@ -36,13 +34,52 @@ public class ExcelUtil {
      * @return FileInputStream
      */
     public static FileInputStream getExcelFileStream(String excelLocation) {
-        FileInputStream file = null;
+        File file = new File(excelLocation);
+        FileInputStream fileInputStream = null;
         try {
-            file = new FileInputStream(new File(excelLocation));
+            if (file.exists())
+                fileInputStream = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             throw new EpmapperInstantiationException("File not found in location: " + excelLocation, e.getCause());
         }
-        return file;
+        return fileInputStream;
+    }
+
+    public static XSSFWorkbook getWorkbook(FileInputStream file) {
+        XSSFWorkbook workbook = null;
+        try {
+            workbook = new XSSFWorkbook(file);
+        } catch (IOException e) {
+            throw new EpmapperInstantiationException("Can not open file to read, check file extension", e.getCause());
+        }
+        return workbook;
+    }
+
+    public static XSSFWorkbook getWorkbook() {
+        template = new XSSFWorkbook();
+        return template;
+    }
+
+    /**
+     * Create sheet in existing file
+     * @param file
+     * @param sheetName
+     * @return
+     */
+    public static XSSFSheet createSheet(FileInputStream file, String sheetName) {
+        XSSFWorkbook workbook = getWorkbook(file);
+        template = workbook;
+        return workbook.createSheet(sheetName);
+    }
+
+    /**
+     * Create new workbook with new sheet
+     * @param sheetName
+     * @return
+     */
+    public static XSSFSheet createSheet(String sheetName) {
+        XSSFWorkbook workbook = getWorkbook();
+        return workbook.createSheet(sheetName);
     }
 
     /**
@@ -51,14 +88,26 @@ public class ExcelUtil {
      * @return sheet
      */
     public static XSSFSheet getSheet(FileInputStream file, String sheetName) {
-
-        XSSFWorkbook workbook = null;
-        try {
-            workbook = new XSSFWorkbook(file);
-        } catch (IOException e) {
-            throw new EpmapperInstantiationException("Can not open file to read, check file extension", e.getCause());
-        }
+        XSSFWorkbook workbook = getWorkbook(file);
         return workbook.getSheet(sheetName);
+    }
+
+    /**
+     * Write to excel file
+     * @param excelLocation
+     */
+    public static void writeToExcel(String excelLocation) {
+        //Write the workbook in file system
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(new File(excelLocation));
+            template.write(out);
+            out.close();
+        } catch (FileNotFoundException e) {
+            throw new EpmapperInstantiationException("File not found in location: "+excelLocation,e.getCause());
+        } catch (IOException e) {
+            throw new EpmapperInstantiationException("Can not open file to write in location: "+excelLocation,e.getCause());
+        }
     }
 
     /**
