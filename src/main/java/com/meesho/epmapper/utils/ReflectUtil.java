@@ -70,7 +70,10 @@ public final class ReflectUtil {
     }
 
     public static void setArrayField(Field field, Object o, List<Object> value) {
-        Object[] array = Utils.convertListToArray(field.getType().getComponentType(), value);
+        Object[] array = null;
+        Class<?> componentType = field.getType().getComponentType();
+        if (componentType != null)
+            array = Utils.convertListToArray(componentType, value);
         try {
             field.setAccessible(true);
             field.set(o, array);

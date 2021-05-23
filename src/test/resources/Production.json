@@ -47,5 +47,42 @@
         }
       }
     ]
+  },
+  {
+    "default": [
+      {
+        "objectE_details": {
+          "value1": "random String",
+          "value2": "random String"
+        },
+        "objectA_details": {
+          "name": "random String",
+          "value": "random String"
+        },
+        "objectB_details": {
+          "value1": "random String",
+          "name": "random String",
+          "value2": "random String"
+        },
+        "objectC_details": [
+          {
+            "value1": "random String",
+            "value2": "random String",
+            "objectF_details": {
+              "value1": "random String",
+              "value2": "random String"
+            },
+            "objectG_details": {
+              "value1": "random String",
+              "value2": "random String"
+            }
+          }
+        ],
+        "objectD_details": {
+          "value1": "random String",
+          "value2": "random String"
+        }
+      }
+    ]
   }
 ]

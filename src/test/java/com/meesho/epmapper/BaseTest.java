@@ -1,14 +1,26 @@
 package com.meesho.epmapper;
 
 import com.google.gson.Gson;
+import com.meesho.epmapper.utils.ExcelUtil;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static com.meesho.epmapper.utils.ExcelUtil.*;
+import static com.meesho.epmapper.utils.ExcelUtil.writeToExcel;
 
 public class BaseTest {
     private String rootPackage = "com.meesho.epmapper";
@@ -21,6 +33,10 @@ public class BaseTest {
     }
     protected ExcelObjectMapper excelObjectMapper;
     private Gson gson = new Gson();
+    private static final String testString = "Test";
+    private static final int rowIndex = 2;
+    private static final int colIndex = 0;
+    protected static String excelLocation;
 
     @BeforeClass
     public void setUp(){
@@ -51,4 +67,71 @@ public class BaseTest {
 
     }
 
+    protected String getTestFileName(String file){
+        excelLocation = file+testString+".xlsx";
+        return excelLocation+":testData";
+    }
+
+    private void writeToFile(String excelLocation,String sheetName){
+        FileInputStream inputStream = getExcelFileStream(excelLocation);
+        XSSFWorkbook workbook = getWorkbook(inputStream);
+        XSSFSheet sheet = getSheet(workbook, sheetName);
+        ExcelUtil.setSheet(sheet);
+        XSSFRow dataType = getDataTypeRow();
+        HashMap<Integer,String> indexTypeMap = new HashMap<>();
+        XSSFRow row = sheet.createRow(rowIndex);
+        IntStream.range(1,getLastCellNoInRow(1)).forEach(index ->{
+            indexTypeMap.put(index,dataType.getCell(index).getStringCellValue());
+            row.createCell(index);
+        });
+
+        XSSFCell cell = row.createCell(colIndex);
+        cell.setCellType(CellType.STRING);
+        cell.setCellValue(testString);
+        indexTypeMap.entrySet().stream().forEach(integerStringEntry -> {
+            XSSFCell dataCell = row.getCell(integerStringEntry.getKey());
+            String[] content = integerStringEntry.getValue().split(":");
+            setCellData(dataCell,content[1]);
+        });
+        writeToExcel(excelLocation,workbook);
+    }
+
+    protected void setTestData(String root,String path){
+        Generator generator = new Generator();
+        generator.generate(root,path);
+        writeToFile(getExcelLocation(excelLocation),"testData");
+    }
+
+    protected List<Object> getData(){
+        excelObjectMapper.setFileLocation(getExcelLocation(excelLocation));
+        List<Object> dataList = excelObjectMapper.getData(testString);
+        return dataList;
+    }
+
+    private void setCellData(XSSFCell cell,String type){
+        boolean isArray = false;
+        if(type.contains("[L[L"))
+            isArray =true;
+        if(type.contains("String")){
+            cell.setCellType(CellType.STRING);
+            cell.setCellValue("random String");
+        }else if(type.equalsIgnoreCase("Long") | type.equalsIgnoreCase("Double")){
+            cell.setCellType(CellType.NUMERIC);
+            cell.setCellValue(12345);
+        }else if(type.equals("Boolean")){
+            cell.setCellType(CellType.BOOLEAN);
+            cell.setCellValue(true);
+        }
+
+        if(isArray){
+            cell.setCellType(CellType.STRING);
+            String value = cell.getStringCellValue();
+            cell.setCellValue(value+",");
+        }
+    }
+
+    public void deleteFile(){
+        File file = new File(getExcelLocation(excelLocation));
+        file.delete();
+    }
 }

@@ -88,12 +88,12 @@ public class DataHandler {
         Cell currentCell = currentRow.getCell(columnIndex);
         String[] fieldType = getSplitedCellValue(dataTypeRow.getCell(columnIndex), fieldTypeSplitdelimeter);
         if (checkIfCellIsNotBlank(currentCell)) {
-            boolean isArrayField = Optional.of(fieldType[1]).filter(key -> key.contains("Array")).isPresent();
             String type = Helper.fieldType(fieldType[1]);
+            boolean isArrayField = Optional.of(type).filter(key -> key.contains("Array")).isPresent();
             if (isArrayField) {
                 boolean isCellContentIsEnd = Optional.of(currentCell.getStringCellValue()).filter(content -> content.contains("END")).isPresent();
                 if (!isCellContentIsEnd) {
-                    map.put(fieldType[0], Helper.ArrayValue.valueOf(type).value(getSplitedCellValue(currentCell, arraySplitdelimeter)));
+                    map.put(fieldType[0], Helper.ArrayValue.valueOf(type).value(getSplitedCellValue(currentCell, arraySplitdelimeter,"[","]")));
                 } else {
                     map.put(fieldType[0], "END");
                 }

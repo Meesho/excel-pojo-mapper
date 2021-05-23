@@ -56,7 +56,7 @@ public class ExcelMapper {
                     //Iterate for each cell data
                     for (HashMap<String, Object> map : data.get(dataCount).rowData) {
                         //If field is of type java.lang
-                        if (fields.get(fieldName).contains("java.lang") && map.get(fieldName) != null) {
+                        if ( isLangField(fields,fieldName) && map.get(fieldName) != null) {
                             if (size > 1 && langProcessCount < size) {
                                 instance = setInitialLangField(instanceClass, map, instance, field, type, fieldName);
                                 list.add(instance);
@@ -65,7 +65,7 @@ public class ExcelMapper {
                             Object object = getObjectIfSizeIsExhausted(size, langProcessCount, dataCount, list, instance);
                             set(object, field, map, fieldName, type);
                             //If field is of type pojo object
-                        } else if (fields.get(fieldName).startsWith(rootString)) {
+                        } else if (isRootString(fields,fieldName)) {
                             rootIndex = getIndexOfTestData(fields.get(fieldName));
                             SingletonMap<Integer, List<Object>> tempMap = setInitialRootStringField(size, rootStringProcessCount, rootIndex, dataCount, list, field);
                             rootStringProcessCount = tempMap.getKey();
@@ -75,12 +75,12 @@ public class ExcelMapper {
                                 ReflectUtil.setFieldData(field, instance, mapping(rootIndex));
                             }
                             //If field is of type pojo object array
-                        } else if (fields.get(fieldName).startsWith(rootArrayString)) {
+                        } else if (isRootArrayString(fields,fieldName)) {
                             setRootArrayStringField(fields, fieldName, field, list, instance);
                         }
                     }
                 }
-            } else {
+            } else if(isRootField(fields,fieldName)){
                 arrList = processRemainingData(fields, field, fieldName, instance);
             }
         }
@@ -197,7 +197,7 @@ public class ExcelMapper {
         int rootIndex = getIndexOfTestData(fields.get(fieldName).replace("[L", ""));
         fieldObjectMap.put(field, instance);
         Object arrList = mapping(rootIndex);
-        if (fields.get(fieldName).startsWith(rootArrayString)) {
+        if (isRootArrayString(fields,fieldName)) {
             if (!(arrList instanceof ArrayList)) {
                 objectList.add(arrList);
                 if (objectList.size() > 0) {
@@ -207,7 +207,7 @@ public class ExcelMapper {
                 setFieldValue(Utils.castToList(arrList), instance, field);
             }
 
-        } else if (fields.get(fieldName).startsWith(rootString)) {
+        } else if (isRootString(fields,fieldName)) {
             ReflectUtil.setFieldData(field, instance, arrList);
             arrList = null;
         }
@@ -381,7 +381,9 @@ public class ExcelMapper {
             if (!isEnd(name, map)) {
                 Object[] objectArray = (Object[]) map.get(name);
                 ReflectUtil.setFieldData(field, obj, Utils.convertArrayToList(objectArray));
-            } else {
+            } else if(type.contains("Array")){
+                ReflectUtil.setFieldData(field, obj, Helper.ArrayValue.valueOf(type).maxValue());
+            }else {
                 ReflectUtil.setFieldData(field, obj, Helper.Value.valueOf(type).maxValue());
             }
         }
@@ -396,5 +398,21 @@ public class ExcelMapper {
      */
     private boolean isEnd(String name, HashMap<String, Object> map) {
         return map.get(name).equals("END");
+    }
+
+    private boolean isRootString(LinkedHashMap<String, String> fields,String fieldName){
+        return fields.get(fieldName).startsWith(rootString);
+    }
+
+    private boolean isRootArrayString(LinkedHashMap<String, String> fields,String fieldName){
+        return fields.get(fieldName).startsWith(rootArrayString);
+    }
+
+    private boolean isLangField(LinkedHashMap<String, String> fields,String fieldName){
+        return fields.get(fieldName).contains("java.lang");
+    }
+
+    private boolean isRootField(LinkedHashMap<String, String> fields,String fieldName){
+        return isRootString(fields,fieldName) | isRootArrayString(fields,fieldName);
     }
 }

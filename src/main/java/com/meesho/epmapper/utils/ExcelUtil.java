@@ -92,6 +92,11 @@ public class ExcelUtil {
         return workbook.getSheet(sheetName);
     }
 
+
+    public static XSSFSheet getSheet(XSSFWorkbook workbook, String sheetName) {
+        return workbook.getSheet(sheetName);
+    }
+
     /**
      * Write to excel file
      * @param excelLocation
@@ -102,6 +107,24 @@ public class ExcelUtil {
         try {
             out = new FileOutputStream(new File(excelLocation));
             template.write(out);
+            out.close();
+        } catch (FileNotFoundException e) {
+            throw new EpmapperInstantiationException("File not found in location: "+excelLocation,e.getCause());
+        } catch (IOException e) {
+            throw new EpmapperInstantiationException("Can not open file to write in location: "+excelLocation,e.getCause());
+        }
+    }
+
+    /**
+     * Write to excel file
+     * @param excelLocation
+     */
+    public static void writeToExcel(String excelLocation,XSSFWorkbook workbook) {
+        //Write the workbook in file system
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(new File(excelLocation));
+            workbook.write(out);
             out.close();
         } catch (FileNotFoundException e) {
             throw new EpmapperInstantiationException("File not found in location: "+excelLocation,e.getCause());
@@ -145,9 +168,14 @@ public class ExcelUtil {
      * @param delimeter
      * @return Cell content in array based on split delimeter
      */
-    public static String[] getSplitedCellValue(Cell cell, String delimeter) {
+    public static String[] getSplitedCellValue(Cell cell, String delimeter,String... remove) {
+        String filterd = null;
         cell.setCellType(CellType.STRING);
-        return cell.getStringCellValue().split(delimeter);
+        filterd = cell.getStringCellValue();
+        if(remove != null && remove.length>0)
+            for (String clean:remove)
+            filterd = filterd.replace(clean,"");
+        return filterd.split(delimeter);
     }
 
     /**
