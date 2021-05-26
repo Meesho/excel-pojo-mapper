@@ -12,24 +12,14 @@
     <description>Project to map excel data with pojo</description>
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <distributionManagement>
-        <repository>
-            <id>central</id>
-            <name>ip-172-31-32-151-releases</name>
-            <url>http://ja.internal.meeshotest.in/artifactory/lib-release</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>ip-172-31-32-151-snapshot</name>
-            <url>http://ja.internal.meeshotest.in/artifactory/lib-snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
