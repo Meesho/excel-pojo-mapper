@@ -4,6 +4,7 @@ import com.meesho.epmapper.handler.DataHandler;
 import com.meesho.epmapper.utils.ReflectUtil;
 import com.meesho.epmapper.utils.Utils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -29,7 +30,7 @@ public class ExcelToPojo {
 
     /**
      * @param startIndex starting row index of data
-     * @param endIndex end index of row data
+     * @param endIndex   end index of row data
      * @return object with data specified between startIndex & endIndex
      */
     public Object getPojo(int startIndex, int endIndex) {
@@ -60,6 +61,12 @@ public class ExcelToPojo {
         return mapper.mapping(0);
     }
 
+    /**
+     * Mapping extra field in case of nested array
+     *
+     * @param list List of found instances
+     * @return
+     */
     private Object arrayHandle(List<Object> list) {
         if (fieldObjectMap.size() > 0 && list != null) {
             ArrayList<Field> keys = new ArrayList<Field>(fieldObjectMap.keySet());

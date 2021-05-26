@@ -1,6 +1,5 @@
 package com.meesho.epmapper.mapper;
 
-
 import com.meesho.epmapper.dataModels.RowData;
 import com.meesho.epmapper.dataModels.TestData;
 import com.meesho.epmapper.utils.Helper;
@@ -12,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 
 public class ExcelMapper {
     private static final String v1 = String.valueOf(Integer.MAX_VALUE);
@@ -33,7 +33,7 @@ public class ExcelMapper {
     }
 
     /**
-     * @param rootIndex index of test data
+     * @param rootIndex Index of data in list of test data based on class name index of test data
      * @return Object mapped with data
      */
     public Object mapping(int rootIndex) {
@@ -56,7 +56,7 @@ public class ExcelMapper {
                     //Iterate for each cell data
                     for (HashMap<String, Object> map : data.get(dataCount).rowData) {
                         //If field is of type java.lang
-                        if ( isLangField(fields,fieldName) && map.get(fieldName) != null) {
+                        if (isLangField(fields, fieldName) && map.get(fieldName) != null) {
                             if (size > 1 && langProcessCount < size) {
                                 instance = setInitialLangField(instanceClass, map, instance, field, type, fieldName);
                                 list.add(instance);
@@ -65,7 +65,7 @@ public class ExcelMapper {
                             Object object = getObjectIfSizeIsExhausted(size, langProcessCount, dataCount, list, instance);
                             set(object, field, map, fieldName, type);
                             //If field is of type pojo object
-                        } else if (isRootString(fields,fieldName)) {
+                        } else if (isRootString(fields, fieldName)) {
                             rootIndex = getIndexOfTestData(fields.get(fieldName));
                             SingletonMap<Integer, List<Object>> tempMap = setInitialRootStringField(size, rootStringProcessCount, rootIndex, dataCount, list, field);
                             rootStringProcessCount = tempMap.getKey();
@@ -75,12 +75,12 @@ public class ExcelMapper {
                                 ReflectUtil.setFieldData(field, instance, mapping(rootIndex));
                             }
                             //If field is of type pojo object array
-                        } else if (isRootArrayString(fields,fieldName)) {
+                        } else if (isRootArrayString(fields, fieldName)) {
                             setRootArrayStringField(fields, fieldName, field, list, instance);
                         }
                     }
                 }
-            } else if(isRootField(fields,fieldName)){
+            } else if (isRootField(fields, fieldName)) {
                 arrList = processRemainingData(fields, field, fieldName, instance);
             }
         }
@@ -90,11 +90,11 @@ public class ExcelMapper {
 
     /**
      * @param instanceClass class name
-     * @param map field & data map
-     * @param instance class instance
-     * @param field Field of class
-     * @param type Custom type based on field is Array Or not.Defined as enum in Helper
-     * @param fieldName Name of field in class
+     * @param map           field & data map
+     * @param instance      class instance
+     * @param field         Field of class
+     * @param type          Custom type based on field is Array Or not.Defined as enum in Helper
+     * @param fieldName     Field name of class
      * @return mapped object with data
      */
     private Object setInitialLangField(Class<?> instanceClass, HashMap<String, Object> map, Object instance, Field field, String type, String fieldName) {
@@ -108,12 +108,12 @@ public class ExcelMapper {
     }
 
     /**
-     * @param size count of rows filled with data
+     * @param size                   count of rows filled with data
      * @param rootStringProcessCount index to track iteraration in recursive call
-     * @param rootIndex index of data in list of test data based on class name
-     * @param dataCount index of data in list of rows
-     * @param list
-     * @param field
+     * @param rootIndex              Index of data in list of test data based on class name
+     * @param dataCount              index of data in list of rows
+     * @param list                   List of found instances
+     * @param field                  Field of class for which value has to be set
      * @return
      */
     private SingletonMap<Integer, List<Object>> setInitialRootStringField(int size, int rootStringProcessCount, int rootIndex, int dataCount, List<Object> list, Field field) {
@@ -137,12 +137,13 @@ public class ExcelMapper {
 
     /**
      * Map remaining pojo object with data
-     * @param size
-     * @param rootIndex
-     * @param dataCount
-     * @param field
-     * @param list
-     * @param unhandled
+     *
+     * @param size      count of rows filled with data
+     * @param rootIndex Index of data in list of test data based on class name index of data in list of test data based on class name
+     * @param dataCount index of data in list of rows
+     * @param field     Field of class for which value has to be set
+     * @param list      List of found instances
+     * @param unhandled List of instances not stored in list
      */
     private void setRemainingRootStringField(int size, int rootIndex, int dataCount, Field field, List<Object> list, List<Object> unhandled) {
         if (size > 1) {
@@ -158,11 +159,12 @@ public class ExcelMapper {
 
     /**
      * Map if pojo object is array
-     * @param fields
-     * @param fieldName
-     * @param field
-     * @param list
-     * @param instance
+     *
+     * @param fields    Map of field name & type
+     * @param fieldName Field name of class
+     * @param field     Field whose value has to be set
+     * @param list      List of found instances
+     * @param instance  class instance which has to be set for field
      */
     private void setRootArrayStringField(LinkedHashMap<String, String> fields, String fieldName, Field field, List<Object> list, Object instance) {
         List<Object> mappedList = new ArrayList<>();
@@ -185,6 +187,14 @@ public class ExcelMapper {
         }
     }
 
+    /**
+     * @param size
+     * @param langProcessCount
+     * @param dataCount
+     * @param list             List of found instances
+     * @param instance         class instance which has to be set for field
+     * @return
+     */
     private Object getObjectIfSizeIsExhausted(int size, int langProcessCount, int dataCount, List<Object> list, Object instance) {
         if (size > 1 && langProcessCount >= size) {
             return list.get(dataCount);
@@ -193,11 +203,18 @@ public class ExcelMapper {
         }
     }
 
+    /**
+     * @param fields    Map of field name & type
+     * @param field     Field of class for which value has to be set
+     * @param fieldName Field name of class field
+     * @param instance  class instance which has to be set for field
+     * @return
+     */
     private Object processRemainingData(LinkedHashMap<String, String> fields, Field field, String fieldName, Object instance) {
         int rootIndex = getIndexOfTestData(fields.get(fieldName).replace("[L", ""));
         fieldObjectMap.put(field, instance);
         Object arrList = mapping(rootIndex);
-        if (isRootArrayString(fields,fieldName)) {
+        if (isRootArrayString(fields, fieldName)) {
             if (!(arrList instanceof ArrayList)) {
                 objectList.add(arrList);
                 if (objectList.size() > 0) {
@@ -207,13 +224,19 @@ public class ExcelMapper {
                 setFieldValue(Utils.castToList(arrList), instance, field);
             }
 
-        } else if (isRootString(fields,fieldName)) {
+        } else if (isRootString(fields, fieldName)) {
             ReflectUtil.setFieldData(field, instance, arrList);
             arrList = null;
         }
         return arrList;
     }
 
+    /**
+     * @param list     List of found instances
+     * @param arrList  List of instance with data mapping
+     * @param instance class instance with data mapping
+     * @return
+     */
     private Object getNonNullObject(List<Object> list, Object arrList, Object instance) {
         if (list.size() > 1) {
             return list;
@@ -224,6 +247,10 @@ public class ExcelMapper {
         }
     }
 
+    /**
+     * @param obj Object to cast if it is list
+     * @return
+     */
     private List<Object> getRootList(Object obj) {
         List<Object> rootList = new ArrayList<>();
         try {
@@ -236,9 +263,10 @@ public class ExcelMapper {
 
     /**
      * Create list based on end indexes
-     * @param indexes
-     * @param rootList
-     * @param field
+     *
+     * @param indexes  List of indexes where content is END
+     * @param rootList List of found instances
+     * @param field    Field of class for which value has to be set
      * @return
      */
     private List<Object> getObjectListByIndexList(List<Integer> indexes, List<Object> rootList, Field field) {
@@ -254,9 +282,10 @@ public class ExcelMapper {
 
     /**
      * Create list based on it's content
-     * @param rootSubList
-     * @param tempList
-     * @param field
+     *
+     * @param rootSubList Sub list based on end indexes
+     * @param tempList    List of sub list
+     * @param field       Field of class for which value has to be set
      */
     private void getList(List<Object> rootSubList, List<Object> tempList, Field field) {
         if (!field.getType().getName().contains("List")) {
@@ -268,9 +297,10 @@ public class ExcelMapper {
 
     /**
      * set field based on type
-     * @param mappedList
-     * @param list
-     * @param field
+     *
+     * @param mappedList list of mapped instances
+     * @param list       List of found instances
+     * @param field      Field of class for which value has to be set
      */
     private void setFieldValueForList(List<Object> mappedList, List<Object> list, Field field) {
         IntStream.range(0, list.size()).filter(listIndex -> listIndex < mappedList.size()).forEach(index -> {
@@ -285,9 +315,10 @@ public class ExcelMapper {
 
     /**
      * set field based on type, if field type is array or not
-     * @param rootList
-     * @param instance
-     * @param field
+     *
+     * @param rootList List to set as value of field
+     * @param instance Parent instance whose field has to be set
+     * @param field    Field of class for which value has to be set
      */
     private void setFieldValue(List<Object> rootList, Object instance, Field field) {
         if (!field.getGenericType().getTypeName().contains("List")) {
@@ -299,9 +330,10 @@ public class ExcelMapper {
 
     /**
      * Map two list of instances to get list of mapped instances
-     * @param mappedList
-     * @param list
-     * @param field
+     *
+     * @param mappedList List of child objects to map with field of parent object
+     * @param list       List of parent objects
+     * @param field      Field of class for which value has to be set
      */
     private void setFieldValue(List<Object> mappedList, List<Object> list, Field field) {
         IntStream.range(0, list.size()).filter(listIndex -> listIndex < mappedList.size()).forEach(index -> ReflectUtil.setFieldData(field, list.get(index), mappedList.get(index)));
@@ -310,8 +342,9 @@ public class ExcelMapper {
 
     /**
      * Get list of object based on end index
-     * @param indexes
-     * @param rootList
+     *
+     * @param indexes  List of indexes where end content present, to find end of data
+     * @param rootList List of Objects has object with END content
      * @return
      */
     private List<Object> getObjectListByIndexList(List<Integer> indexes, List<?> rootList) {
@@ -320,7 +353,8 @@ public class ExcelMapper {
 
     /**
      * Get index list for END
-     * @param objectList
+     *
+     * @param objectList List of Objects has object with END content
      * @return
      */
     private List<Integer> filterEndIndexes(List<?> objectList) {
@@ -329,7 +363,8 @@ public class ExcelMapper {
 
     /**
      * Check content is END based on data type Long/Integer/Double.Max value in case of Long/Integer/Double will considered END content.
-     * @param str
+     *
+     * @param str string is END or not
      * @return
      */
     private boolean isEnd(String str) {
@@ -338,7 +373,8 @@ public class ExcelMapper {
 
     /**
      * Find index of data(class info,column info) based on class name
-     * @param str
+     *
+     * @param str Part of class name
      * @return
      */
     private int getIndexOfTestData(String str) {
@@ -348,7 +384,8 @@ public class ExcelMapper {
 
     /**
      * sort field based on field type
-     * @param rootIndex
+     *
+     * @param rootIndex Index of data in list of test data based on class name
      * @return
      */
     private LinkedHashMap<String, String> sortTestDataKeys(int rootIndex) {
@@ -368,11 +405,12 @@ public class ExcelMapper {
 
     /**
      * Set field data based on content type
-     * @param obj
-     * @param field
-     * @param map
-     * @param name
-     * @param type
+     *
+     * @param obj   Parent object whose field to be set
+     * @param field Field of parent object
+     * @param map   Map of field name & cell content
+     * @param name  Field name
+     * @param type  Field type
      */
     private void set(Object obj, Field field, HashMap<String, Object> map, String name, String type) {
         try {
@@ -381,9 +419,9 @@ public class ExcelMapper {
             if (!isEnd(name, map)) {
                 Object[] objectArray = (Object[]) map.get(name);
                 ReflectUtil.setFieldData(field, obj, Utils.convertArrayToList(objectArray));
-            } else if(type.contains("Array")){
+            } else if (type.contains("Array")) {
                 ReflectUtil.setFieldData(field, obj, Helper.ArrayValue.valueOf(type).maxValue());
-            }else {
+            } else {
                 ReflectUtil.setFieldData(field, obj, Helper.Value.valueOf(type).maxValue());
             }
         }
@@ -392,27 +430,48 @@ public class ExcelMapper {
 
     /**
      * Check if content is END
-     * @param name
-     * @param map
+     *
+     * @param name Field name
+     * @param map  Map of field name & cell content
      * @return
      */
     private boolean isEnd(String name, HashMap<String, Object> map) {
         return map.get(name).equals("END");
     }
 
-    private boolean isRootString(LinkedHashMap<String, String> fields,String fieldName){
+    /**
+     * @param fields    Map of field name & type
+     * @param fieldName Field name of class field
+     * @return Field is type of pojo class
+     */
+    private boolean isRootString(LinkedHashMap<String, String> fields, String fieldName) {
         return fields.get(fieldName).startsWith(rootString);
     }
 
-    private boolean isRootArrayString(LinkedHashMap<String, String> fields,String fieldName){
+    /**
+     * @param fields    Map of field name & type
+     * @param fieldName Field name of class field
+     * @return Field is type of array of pojo class
+     */
+    private boolean isRootArrayString(LinkedHashMap<String, String> fields, String fieldName) {
         return fields.get(fieldName).startsWith(rootArrayString);
     }
 
-    private boolean isLangField(LinkedHashMap<String, String> fields,String fieldName){
+    /**
+     * @param fields    Map of field name & type
+     * @param fieldName Field name of class field
+     * @return Field is java.lang field
+     */
+    private boolean isLangField(LinkedHashMap<String, String> fields, String fieldName) {
         return fields.get(fieldName).contains("java.lang");
     }
 
-    private boolean isRootField(LinkedHashMap<String, String> fields,String fieldName){
-        return isRootString(fields,fieldName) | isRootArrayString(fields,fieldName);
+    /**
+     * @param fields    Map of field name & type
+     * @param fieldName Field name of class field
+     * @return Field is type of array of pojo class or pojo class
+     */
+    private boolean isRootField(LinkedHashMap<String, String> fields, String fieldName) {
+        return isRootString(fields, fieldName) | isRootArrayString(fields, fieldName);
     }
 }

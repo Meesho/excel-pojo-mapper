@@ -24,8 +24,9 @@ public class DataHandler {
     private TestData testData;
 
     /**
-     *  Second row contain field & field type (field:field type),method set these value to test data object
-     * @param testData
+     * Second row contain field & field type (field:field type),method set these value to test data object
+     *
+     * @param testData Complete information about class,it's fields & column indexes.
      */
     private void setFieldTypeMap(TestData testData) {
         IntStream.rangeClosed(testData.startColIndex, testData.endColIndex).forEach(j -> {
@@ -34,10 +35,12 @@ public class DataHandler {
         });
     }
 
-    /** Second row contain pojo class name & column range for data,method set these value to test data object
-     * @param start
-     * @param end
-     * @param sheet
+    /**
+     * Second row contain pojo class name & column range for data,method set these value to test data object
+     *
+     * @param start Starting column index of class fields
+     * @param end   Ending column index of class fields
+     * @param sheet Sheet which data need to be mapped with pojo
      */
     public void createTestDataStructure(int start, int end, XSSFSheet sheet) {
         dataList = new ArrayList<>();
@@ -60,7 +63,8 @@ public class DataHandler {
 
     /**
      * Method find end of data kept in excel.If two consecutive row are blank,it consider end
-     * @param sheet
+     *
+     * @param sheet Sheet which data need to be mapped with pojo
      * @return
      */
     public int getNumberOfRows(XSSFSheet sheet) {
@@ -77,10 +81,11 @@ public class DataHandler {
 
     /**
      * Create data for cell with field name & it's content.We use END delimiter to separate data in case of nested list
-     * @param rowData
-     * @param currentRow
-     * @param dataTypeRow
-     * @param columnIndex
+     *
+     * @param rowData     Data of complete row
+     * @param currentRow  Row from where data has to be fetched
+     * @param dataTypeRow Row contains field & it's type
+     * @param columnIndex Index of current cell
      * @return
      */
     private List<HashMap<String, Object>> createCellData(RowData rowData, Row currentRow, Row dataTypeRow, int columnIndex) {
@@ -93,7 +98,7 @@ public class DataHandler {
             if (isArrayField) {
                 boolean isCellContentIsEnd = Optional.of(currentCell.getStringCellValue()).filter(content -> content.contains("END")).isPresent();
                 if (!isCellContentIsEnd) {
-                    map.put(fieldType[0], Helper.ArrayValue.valueOf(type).value(getSplitedCellValue(currentCell, arraySplitdelimeter,"[","]")));
+                    map.put(fieldType[0], Helper.ArrayValue.valueOf(type).value(getSplitedCellValue(currentCell, arraySplitdelimeter, "[", "]")));
                 } else {
                     map.put(fieldType[0], "END");
                 }
@@ -107,10 +112,10 @@ public class DataHandler {
     }
 
     /**
-     * @param currentRow
-     * @param dataTypeRow
-     * @param startColumn
-     * @param endColum
+     * @param currentRow  Row from where data has to be fetched
+     * @param dataTypeRow Row contains field & it's type
+     * @param startColumn Starting column index of class fields
+     * @param endColum    Ending column index of class fields
      * @return Data in Row
      */
     private RowData createRowData(Row currentRow, Row dataTypeRow, int startColumn, int endColum) {
@@ -123,10 +128,10 @@ public class DataHandler {
     }
 
     /**
-     * @param start
-     * @param end
-     * @param testData
-     * @param sheet
+     * @param start    Starting row index of data
+     * @param end      Ending row index of data
+     * @param testData Complete information about class,it's fields & column indexes.
+     * @param sheet    Sheet which data need to be mapped with pojo
      * @return List of row's data
      */
     private List<RowData> createData(int start, int end, TestData testData, XSSFSheet sheet) {
@@ -143,7 +148,7 @@ public class DataHandler {
     }
 
     /**
-     * @param sheet
+     * @param sheet Sheet which data need to be mapped with pojo
      * @return row index for key
      */
     public Map<String, List<Integer>> getDataInfo(XSSFSheet sheet) {
@@ -172,9 +177,11 @@ public class DataHandler {
         return dataInfo;
     }
 
-    /** Map range of row index with data key
-     * @param dataInfo
-     * @param sheet
+    /**
+     * Map range of row index with data key
+     *
+     * @param dataInfo Range of row index for data name
+     * @param sheet    Sheet which data need to be mapped with pojo
      * @return
      */
     public Map<String, List<Integer[]>> getDataInfoForKey(Map<String, List<Integer>> dataInfo, XSSFSheet sheet) {

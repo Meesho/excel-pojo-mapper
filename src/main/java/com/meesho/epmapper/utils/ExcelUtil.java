@@ -10,10 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class ExcelUtil {
 
@@ -23,14 +20,14 @@ public class ExcelUtil {
     private static XSSFWorkbook template;
 
     /**
-     * @param sheet
+     * @param sheet Sheet in excel file
      */
     public static void setSheet(XSSFSheet sheet) {
         ExcelUtil.sheet = sheet;
     }
 
     /**
-     * @param excelLocation Location of Excel sheet
+     * @param excelLocation Path of excel file
      * @return FileInputStream
      */
     public static FileInputStream getExcelFileStream(String excelLocation) {
@@ -62,8 +59,9 @@ public class ExcelUtil {
 
     /**
      * Create sheet in existing file
-     * @param file
-     * @param sheetName
+     *
+     * @param file      Input stream for specified excel file
+     * @param sheetName Name of sheet which has to be created
      * @return
      */
     public static XSSFSheet createSheet(FileInputStream file, String sheetName) {
@@ -74,7 +72,8 @@ public class ExcelUtil {
 
     /**
      * Create new workbook with new sheet
-     * @param sheetName
+     *
+     * @param sheetName Name of sheet which has to be created
      * @return
      */
     public static XSSFSheet createSheet(String sheetName) {
@@ -99,27 +98,19 @@ public class ExcelUtil {
 
     /**
      * Write to excel file
-     * @param excelLocation
+     *
+     * @param excelLocation Path of excel file
      */
     public static void writeToExcel(String excelLocation) {
-        //Write the workbook in file system
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(new File(excelLocation));
-            template.write(out);
-            out.close();
-        } catch (FileNotFoundException e) {
-            throw new EpmapperInstantiationException("File not found in location: "+excelLocation,e.getCause());
-        } catch (IOException e) {
-            throw new EpmapperInstantiationException("Can not open file to write in location: "+excelLocation,e.getCause());
-        }
+        writeToExcel(excelLocation, template);
     }
 
     /**
      * Write to excel file
-     * @param excelLocation
+     *
+     * @param excelLocation Path of excel file
      */
-    public static void writeToExcel(String excelLocation,XSSFWorkbook workbook) {
+    public static void writeToExcel(String excelLocation, XSSFWorkbook workbook) {
         //Write the workbook in file system
         FileOutputStream out = null;
         try {
@@ -127,14 +118,14 @@ public class ExcelUtil {
             workbook.write(out);
             out.close();
         } catch (FileNotFoundException e) {
-            throw new EpmapperInstantiationException("File not found in location: "+excelLocation,e.getCause());
+            throw new EpmapperInstantiationException("File not found in location: " + excelLocation, e.getCause());
         } catch (IOException e) {
-            throw new EpmapperInstantiationException("Can not open file to write in location: "+excelLocation,e.getCause());
+            throw new EpmapperInstantiationException("Can not open file to write in location: " + excelLocation, e.getCause());
         }
     }
 
     /**
-     * @param rowIndex
+     * @param rowIndex Index of row for which last index of last cell has to be find
      * @return Index of last cell in row
      */
     public static int getLastCellNoInRow(int rowIndex) {
@@ -163,36 +154,33 @@ public class ExcelUtil {
         return getDataTypeRow().getLastCellNum();
     }
 
+
     /**
-     * @param cell
-     * @param delimeter
-     * @return Cell content in array based on split delimeter
+     * @param cell      Cell from which data has to be fetched
+     * @param delimeter Delimeter to split fetched data
+     * @param remove    remove string from cell content
+     * @return Array of string after removing string not required and splited based on delimeter
      */
-    public static String[] getSplitedCellValue(Cell cell, String delimeter,String... remove) {
+    public static String[] getSplitedCellValue(Cell cell, String delimeter, String... remove) {
         String filterd = null;
         cell.setCellType(CellType.STRING);
         filterd = cell.getStringCellValue();
-        if(remove != null && remove.length>0)
-            for (String clean:remove)
-            filterd = filterd.replace(clean,"");
+        if (remove != null && remove.length > 0)
+            for (String clean : remove)
+                filterd = filterd.replace(clean, "");
         return filterd.split(delimeter);
     }
 
     /**
-     * @param cell
+     * @param cell Cell which is blank or not
      * @return true if cell is not blank
      */
     public static boolean checkIfCellIsNotBlank(Cell cell) {
         return Optional.ofNullable(cell).filter(rowCell -> StringUtils.isNotBlank(rowCell.toString())).map(Cell::getCellType).filter(cellType -> cellType != CellType.BLANK).isPresent();
     }
 
-    public static List<Cell> getNonEmptyCell(Row row) {
-        List<Cell> cells = IntStream.rangeClosed(row.getFirstCellNum(), row.getLastCellNum()).mapToObj(row::getCell).filter(ExcelUtil::checkIfCellIsNotBlank).collect(Collectors.toList());
-        return cells;
-    }
-
     /**
-     * @param row
+     * @param row Row which is empty or not
      * @return true if row is empty
      */
     public static boolean checkIfRowIsEmpty(Row row) {

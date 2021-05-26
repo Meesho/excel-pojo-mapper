@@ -1,9 +1,10 @@
 package com.meesho.epmapper.testData.pojoClasses.nestedList;
 
+import lombok.Data;
 
-import java.util.Arrays;
 import java.util.List;
 
+@Data
 public class ObjectCheck {
     private String percentage;
 
@@ -11,42 +12,4 @@ public class ObjectCheck {
 
     private List<Check> check;
 
-    public List<Check> getCheck() {
-        return check;
-    }
-
-    public void setCheck(List<Check> check) {
-        this.check = check;
-    }
-
-
-
-    public String getPercentage ()
-    {
-        return percentage;
-    }
-
-    public void setPercentage (String percentage)
-    {
-        this.percentage = percentage;
-    }
-
-    public String getType ()
-    {
-        return type;
-    }
-
-    public void setType (String type)
-    {
-        this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return "Distribution{" +
-                "percentage=" + percentage +
-                ", type='" + type + '\'' +
-                ", check=" + check.toString() +
-                '}';
-    }
 }

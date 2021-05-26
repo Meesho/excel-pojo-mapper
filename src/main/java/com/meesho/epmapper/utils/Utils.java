@@ -28,10 +28,7 @@ public class Utils {
     }
 
     public static boolean contentIsObjectArray(List<Object> list) {
-        if (list.get(0) instanceof Object[]) {
-            return true;
-        }
-        return false;
+        return list.get(0) instanceof Object[];
     }
 
     public static List<Object[]> getListOfObjectArray(List<Object> list) {
