@@ -37,4 +37,32 @@ public class GeneratorTest extends BaseTest {
         validate(data, JsonData.ProductionJson.getDataForKey("default"));
         deleteFile();
     }
+
+    @Test
+    public void nestedArrayTestV1() {
+        excelObjectMapper = builder.fileLocation(getExcelLocation(getTestFileName("NestedArray"))).build();
+        setTestData(excelObjectMapper,"testData.pojoClasses.nestedArray.NestedArrayCheck");
+        List<Object> data = getData();
+        validate(data, JsonData.NestedArrayJson.getDataForKey("default"));
+        deleteFile();
+    }
+
+
+    @Test
+    public void basketTestV1() {
+        excelObjectMapper = builder.fileLocation(getExcelLocation(getTestFileName("Basket"))).build();
+        setTestData(excelObjectMapper,"testData.pojoClasses.basket.Basket");
+        List<Object> data = getData();
+        validate(data, JsonData.BasketJson.getDataForKey("default"));
+        deleteFile();
+    }
+
+    @Test
+    public void productionTestV1() {
+        excelObjectMapper = builder.fileLocation(getExcelLocation(getTestFileName("Production"))).build();
+        setTestData(excelObjectMapper,"testData.pojoClasses.production.Production");
+        List<Object> data = getData();
+        validate(data, JsonData.ProductionJson.getDataForKey("default"));
+        deleteFile();
+    }
 }

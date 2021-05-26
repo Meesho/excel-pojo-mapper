@@ -121,4 +121,10 @@ public class Generator {
         });
         createExcelTemplate(pathInfo[0], pathInfo[1], classSet, map);
     }
+
+    public void generate(ExcelObjectMapper objectMapper,String relativeClassPath){
+        String pojo = objectMapper.getRootPackage()+"."+relativeClassPath;
+        String path = objectMapper.getFileLocation()+":"+objectMapper.getSheetName();
+        generate(pojo,path);
+    }
 }

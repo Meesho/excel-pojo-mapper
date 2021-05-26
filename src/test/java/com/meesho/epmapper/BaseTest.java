@@ -30,6 +30,7 @@ public class BaseTest {
     private String rootPackage = "com.meesho.epmapper";
     private String projectLocation = System.getProperty("user.dir");
     private Gson gson = new Gson();
+    private Generator generator = new Generator();
 
     protected String getRootClass(String classPath) {
         return rootPackage + "." + classPath;
@@ -89,25 +90,28 @@ public class BaseTest {
         XSSFCell cell = row.createCell(colIndex);
         cell.setCellType(CellType.STRING);
         cell.setCellValue(testString);
-        indexTypeMap.entrySet().stream().forEach(integerStringEntry -> {
-            XSSFCell dataCell = row.getCell(integerStringEntry.getKey());
-            String[] content = integerStringEntry.getValue().split(":");
+        indexTypeMap.forEach((key, value) -> {
+            XSSFCell dataCell = row.getCell(key);
+            String[] content = value.split(":");
             setCellData(dataCell, content[1]);
         });
         writeToExcel(excelLocation, workbook);
     }
 
     protected void setTestData(String root, String path) {
-        Generator generator = new Generator();
         generator.generate(root, path);
+        writeToFile(getExcelLocation(excelLocation), "testData");
+    }
+
+    protected void setTestData(ExcelObjectMapper mapper, String relativeClassPath) {
+        generator.generate(mapper, relativeClassPath);
         writeToFile(getExcelLocation(excelLocation), "testData");
     }
 
     protected List<Object> getData() {
         excelObjectMapper = builder.fileLocation(getExcelLocation(excelLocation)).build();
         ExcelObjectMapperHelper.setObjectMapper(excelObjectMapper);
-        List<Object> dataList = ExcelObjectMapperHelper.getData(testString);
-        return dataList;
+        return ExcelObjectMapperHelper.getData(testString);
     }
 
     private void setCellData(XSSFCell cell, String type) {
