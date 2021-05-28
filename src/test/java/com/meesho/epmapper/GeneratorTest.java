@@ -2,6 +2,7 @@ package com.meesho.epmapper;
 
 import com.meesho.epmapper.testData.JsonData;
 import org.testng.annotations.Test;
+
 import java.util.List;
 
 public class GeneratorTest extends BaseTest {
@@ -41,7 +42,7 @@ public class GeneratorTest extends BaseTest {
     @Test
     public void nestedArrayTestV1() {
         excelObjectMapper = builder.fileLocation(getExcelLocation(getTestFileName("NestedArray"))).build();
-        setTestData(excelObjectMapper,"testData.pojoClasses.nestedArray.NestedArrayCheck");
+        setTestData(excelObjectMapper, "testData.pojoClasses.nestedArray.NestedArrayCheck");
         List<Object> data = getData();
         validate(data, JsonData.NestedArrayJson.getDataForKey("default"));
         deleteFile();
@@ -51,7 +52,7 @@ public class GeneratorTest extends BaseTest {
     @Test
     public void basketTestV1() {
         excelObjectMapper = builder.fileLocation(getExcelLocation(getTestFileName("Basket"))).build();
-        setTestData(excelObjectMapper,"testData.pojoClasses.basket.Basket");
+        setTestData(excelObjectMapper, "testData.pojoClasses.basket.Basket");
         List<Object> data = getData();
         validate(data, JsonData.BasketJson.getDataForKey("default"));
         deleteFile();
@@ -60,7 +61,7 @@ public class GeneratorTest extends BaseTest {
     @Test
     public void productionTestV1() {
         excelObjectMapper = builder.fileLocation(getExcelLocation(getTestFileName("Production"))).build();
-        setTestData(excelObjectMapper,"testData.pojoClasses.production.Production");
+        setTestData(excelObjectMapper, "testData.pojoClasses.production.Production");
         List<Object> data = getData();
         validate(data, JsonData.ProductionJson.getDataForKey("default"));
         deleteFile();
