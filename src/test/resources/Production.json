@@ -1,0 +1,88 @@
+[
+  {
+    "key1": [
+      {
+        "objectE_details": {
+          "value1": "110009",
+          "value2": "sec poc Hno"
+        },
+        "objectA_details": {
+          "name": "New Delhi",
+          "value": "Deepak Rastogi"
+        },
+        "objectB_details": {
+          "value1": "123456020",
+          "name": "Deepak Rastogi",
+          "value2": "Delhi"
+        },
+        "objectC_details": [
+          {
+            "value1": "4500",
+            "value2": "ABC678",
+            "objectF_details": {
+              "value1": "HDS798HG",
+              "value2": "NewSeller"
+            },
+            "objectG_details": {
+              "value1": "3",
+              "value2": "5.6"
+            }
+          },
+          {
+            "value1": "5000",
+            "value2": "BCD679",
+            "objectF_details": {
+              "value1": "HDS798HH",
+              "value2": "NewSeller_1"
+            },
+            "objectG_details": {
+              "value1": "4",
+              "value2": "5.7"
+            }
+          }
+        ],
+        "objectD_details": {
+          "value1": "FCDM401706",
+          "value2": "515"
+        }
+      }
+    ]
+  },
+  {
+    "default": [
+      {
+        "objectE_details": {
+          "value1": "random String",
+          "value2": "random String"
+        },
+        "objectA_details": {
+          "name": "random String",
+          "value": "random String"
+        },
+        "objectB_details": {
+          "value1": "random String",
+          "name": "random String",
+          "value2": "random String"
+        },
+        "objectC_details": [
+          {
+            "value1": "random String",
+            "value2": "random String",
+            "objectF_details": {
+              "value1": "random String",
+              "value2": "random String"
+            },
+            "objectG_details": {
+              "value1": "random String",
+              "value2": "random String"
+            }
+          }
+        ],
+        "objectD_details": {
+          "value1": "random String",
+          "value2": "random String"
+        }
+      }
+    ]
+  }
+]
