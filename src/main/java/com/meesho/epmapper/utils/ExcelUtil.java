@@ -14,8 +14,8 @@ import java.util.Optional;
 
 public class ExcelUtil {
 
-    private static final int headerRowNo = 0;
-    private static final int dataTypeRowNo = 1;
+    private static final int HEADER_ROW_INDEX = 0;
+    private static final int DATA_TYPE_ROW_INDEX = 1;
     private static XSSFSheet sheet;
     private static XSSFWorkbook template;
 
@@ -137,14 +137,14 @@ public class ExcelUtil {
      * @return Header row contains pojo class names
      */
     public static XSSFRow getHeaderRow() {
-        return sheet.getRow(headerRowNo);
+        return sheet.getRow(HEADER_ROW_INDEX);
     }
 
     /**
      * @return Data type row contains field name & type of pojo classes
      */
     public static XSSFRow getDataTypeRow() {
-        return sheet.getRow(dataTypeRowNo);
+        return sheet.getRow(DATA_TYPE_ROW_INDEX);
     }
 
     /**

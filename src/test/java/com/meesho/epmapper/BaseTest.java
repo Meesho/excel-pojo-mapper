@@ -21,10 +21,12 @@ import static com.meesho.epmapper.ExcelObjectMapper.ExcelObjectMapperBuilder;
 import static com.meesho.epmapper.utils.ExcelUtil.*;
 
 public class BaseTest {
-    private static final String testString = "Test";
-    private static final int rowIndex = 2;
-    private static final int colIndex = 0;
-    protected static String excelLocation;
+    private static final String TEST_STRING = "Test";
+    private static final int ROW_INDEX = 2;
+    private static final int COLUMN_INDEX = 0;
+    private static final String SHEET_NAME = "testData";
+    public static final String DEFAULT_DATA_SET = "default";
+    protected String excelLocation;
     protected ExcelObjectMapperBuilder builder;
     protected ExcelObjectMapper excelObjectMapper;
     private String rootPackage = "com.meesho.epmapper";
@@ -44,7 +46,7 @@ public class BaseTest {
     public void setUp() {
         builder = ExcelObjectMapper.builder().
                 rootPackage(this.getClass().getPackage().getName())
-                .sheetName("testData");
+                .sheetName(SHEET_NAME);
     }
 
     protected String getJsonString(Object object) {
@@ -60,7 +62,7 @@ public class BaseTest {
     }
 
     protected void validate(List<Object> expected, List<Object> actual) {
-        if (expected == null | actual == null)
+        if (expected == null || actual == null)
             Assert.fail();
         if (expected.size() != actual.size())
             Assert.fail();
@@ -70,8 +72,8 @@ public class BaseTest {
     }
 
     protected String getTestFileName(String file) {
-        excelLocation = file + testString + ".xlsx";
-        return excelLocation + ":testData";
+        excelLocation = file + TEST_STRING + ".xlsx";
+        return excelLocation + ":"+SHEET_NAME;
     }
 
     private void writeToFile(String excelLocation, String sheetName) {
@@ -81,15 +83,15 @@ public class BaseTest {
         ExcelUtil.setSheet(sheet);
         XSSFRow dataType = getDataTypeRow();
         HashMap<Integer, String> indexTypeMap = new HashMap<>();
-        XSSFRow row = sheet.createRow(rowIndex);
+        XSSFRow row = sheet.createRow(ROW_INDEX);
         IntStream.range(1, getLastCellNoInRow(1)).forEach(index -> {
             indexTypeMap.put(index, dataType.getCell(index).getStringCellValue());
             row.createCell(index);
         });
 
-        XSSFCell cell = row.createCell(colIndex);
+        XSSFCell cell = row.createCell(COLUMN_INDEX);
         cell.setCellType(CellType.STRING);
-        cell.setCellValue(testString);
+        cell.setCellValue(TEST_STRING);
         indexTypeMap.forEach((key, value) -> {
             XSSFCell dataCell = row.getCell(key);
             String[] content = value.split(":");
@@ -100,18 +102,18 @@ public class BaseTest {
 
     protected void setTestData(String root, String path) {
         generator.generate(root, path);
-        writeToFile(getExcelLocation(excelLocation), "testData");
+        writeToFile(getExcelLocation(excelLocation), SHEET_NAME);
     }
 
     protected void setTestData(ExcelObjectMapper mapper, String relativeClassPath) {
         generator.generate(mapper, relativeClassPath);
-        writeToFile(getExcelLocation(excelLocation), "testData");
+        writeToFile(getExcelLocation(excelLocation), SHEET_NAME);
     }
 
     protected List<Object> getData() {
         excelObjectMapper = builder.fileLocation(getExcelLocation(excelLocation)).build();
         ExcelObjectMapperHelper.setObjectMapper(excelObjectMapper);
-        return ExcelObjectMapperHelper.getData(testString);
+        return ExcelObjectMapperHelper.getData(TEST_STRING);
     }
 
     private void setCellData(XSSFCell cell, String type) {
@@ -121,7 +123,7 @@ public class BaseTest {
         if (type.contains("String")) {
             cell.setCellType(CellType.STRING);
             cell.setCellValue("random String");
-        } else if (type.equalsIgnoreCase("Long") | type.equalsIgnoreCase("Double")) {
+        } else if (type.equalsIgnoreCase("Long") || type.equalsIgnoreCase("Double")) {
             cell.setCellType(CellType.NUMERIC);
             cell.setCellValue(12345);
         } else if (type.equals("Boolean")) {

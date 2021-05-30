@@ -31,7 +31,7 @@ public class Generator {
             String type = field.getType().getName();
             String className = field.getDeclaringClass().getName();
             classSet.add(className);
-            if (!type.contains("java.lang") && !type.contains("java.util")) {
+            if (isNotLangUtil(type)) {
                 if (type.contains("[L")) {
                     type = type.replace("[L", "").replace(";", "").trim();
                 }
@@ -39,7 +39,7 @@ public class Generator {
                 createClassHirerchy(child.getName(), classSet, list);
             }
 
-            if (type.contains("java.util") && type.contains("List")) {
+            if (isJavaUtilList(type)) {
                 ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
                 Class<?> listClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
                 if (listClass.getName().contains("java.lang")) {
@@ -126,5 +126,13 @@ public class Generator {
         String pojo = objectMapper.getRootPackage()+"."+relativeClassPath;
         String path = objectMapper.getFileLocation()+":"+objectMapper.getSheetName();
         generate(pojo,path);
+    }
+
+    private static boolean isNotLangUtil(String type){
+        return !type.contains("java.lang") && !type.contains("java.util");
+    }
+
+    private static boolean isJavaUtilList(String type){
+        return type.contains("java.util") && type.contains("List");
     }
 }
