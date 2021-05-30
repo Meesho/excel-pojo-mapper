@@ -14,11 +14,11 @@ import java.util.stream.IntStream;
 
 
 public class ExcelMapper {
-    private static final String v1 = String.valueOf(Integer.MAX_VALUE);
-    private static final String v2 = String.valueOf(Long.MAX_VALUE);
-    private static final String v3 = String.valueOf(Double.MAX_VALUE);
-    private static final String rootString = System.getProperty("rootPackage");
-    private static final String rootArrayString = "[L" + rootString;
+    private static final String INTEGER_MAX = String.valueOf(Integer.MAX_VALUE);
+    private static final String LONG_MAX = String.valueOf(Long.MAX_VALUE);
+    private static final String DOUBLE_MAX = String.valueOf(Double.MAX_VALUE);
+    private static final String ROOT_STRING = System.getProperty("rootPackage");
+    private static final String ROOT_ARRAY_STRING = "[L" + ROOT_STRING;
     private List<TestData> testDataList;
     private List<List<RowData>> dataList;
     private List<Object> objectList;
@@ -368,7 +368,7 @@ public class ExcelMapper {
      * @return
      */
     private boolean isEnd(String str) {
-        return str.contains("END") || str.contains(v1) || str.contains(v2) || str.contains(v3);
+        return str.contains("END") || str.contains(INTEGER_MAX) || str.contains(LONG_MAX) || str.contains(DOUBLE_MAX);
     }
 
     /**
@@ -393,7 +393,7 @@ public class ExcelMapper {
         Comparator<Map.Entry<String, String>> comp = new Comparator<Map.Entry<String, String>>() {
             @Override
             public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
-                if (o1.getValue().contains("java.lang") && o2.getValue().contains(rootString)) {
+                if (o1.getValue().contains("java.lang") && o2.getValue().contains(ROOT_STRING)) {
                     return -1;
                 } else {
                     return 1;
@@ -445,7 +445,7 @@ public class ExcelMapper {
      * @return Field is type of pojo class
      */
     private boolean isRootString(LinkedHashMap<String, String> fields, String fieldName) {
-        return fields.get(fieldName).startsWith(rootString);
+        return fields.get(fieldName).startsWith(ROOT_STRING);
     }
 
     /**
@@ -454,7 +454,7 @@ public class ExcelMapper {
      * @return Field is type of array of pojo class
      */
     private boolean isRootArrayString(LinkedHashMap<String, String> fields, String fieldName) {
-        return fields.get(fieldName).startsWith(rootArrayString);
+        return fields.get(fieldName).startsWith(ROOT_ARRAY_STRING);
     }
 
     /**
@@ -472,6 +472,6 @@ public class ExcelMapper {
      * @return Field is type of array of pojo class or pojo class
      */
     private boolean isRootField(LinkedHashMap<String, String> fields, String fieldName) {
-        return isRootString(fields, fieldName) | isRootArrayString(fields, fieldName);
+        return isRootString(fields, fieldName) || isRootArrayString(fields, fieldName);
     }
 }

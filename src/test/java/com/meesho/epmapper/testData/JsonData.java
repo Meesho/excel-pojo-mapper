@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public enum JsonData {
-    NestedArrayJson("NestedArray.json"), BasketJson("Basket.json"), ProductionJson("Production.json");
+    NESTED_ARRAY_JSON("NestedArray.json"), BASKET_JSON("Basket.json"), PRODUCTION_JSON("Production.json");
 
     private String fileName;
     private Type DATA_TYPE = new TypeToken<List<Map<String, Object>>>() {

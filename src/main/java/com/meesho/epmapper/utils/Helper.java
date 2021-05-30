@@ -14,17 +14,17 @@ public class Helper {
         String arrStr = "";
         String baseStr = "";
         if (string.contains("[L[L"))
-            arrStr = "Array";
+            arrStr = "_ARRAY";
         if (string.contains("String")) {
-            baseStr = "StringValue";
+            baseStr = "STRING_VALUE";
         } else if (string.contains("Integer")) {
-            baseStr = "IntegerValue";
+            baseStr = "INTEGER_VALUE";
         } else if (string.contains("Double")) {
-            baseStr = "DoubleValue";
+            baseStr = "DOUBLE_VALUE";
         } else if (string.contains("Boolean")) {
-            baseStr = "BooleanValue";
+            baseStr = "BOOLEAN_VALUE";
         } else if (string.contains("Long")) {
-            baseStr = "LongValue";
+            baseStr = "LONG_VALUE";
         } else {
             baseStr = "END";
         }
@@ -33,7 +33,7 @@ public class Helper {
 
 
     public enum ArrayValue {
-        IntegerValueArray {
+        INTEGER_VALUE_ARRAY {
             public Integer[] value(String[] strings) {
                 return Stream.of(strings).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
             }
@@ -41,7 +41,7 @@ public class Helper {
             public List<Integer> maxValue() {
                 return Collections.singletonList(Integer.MAX_VALUE);
             }
-        }, DoubleValueArray {
+        }, DOUBLE_VALUE_ARRAY {
             public Double[] value(String[] strings) {
                 return Stream.of(strings).mapToDouble(Double::parseDouble).boxed().toArray(Double[]::new);
             }
@@ -49,7 +49,7 @@ public class Helper {
             public List<Double> maxValue() {
                 return Collections.singletonList(Double.MAX_VALUE);
             }
-        }, BooleanValueArray {
+        }, BOOLEAN_VALUE_ARRAY {
             public Boolean[] value(String[] strings) {
                 return Stream.of(strings).map(Boolean::parseBoolean).toArray(Boolean[]::new);
             }
@@ -57,7 +57,7 @@ public class Helper {
             public List<Boolean> maxValue() {
                 return Collections.singletonList(Boolean.TRUE);
             }
-        }, LongValueArray {
+        }, LONG_VALUE_ARRAY {
             public Long[] value(String[] strings) {
                 return Stream.of(strings).mapToLong(Long::parseLong).boxed().toArray(Long[]::new);
             }
@@ -65,7 +65,7 @@ public class Helper {
             public List<Long> maxValue() {
                 return Collections.singletonList(Long.MAX_VALUE);
             }
-        }, StringValueArray {
+        }, STRING_VALUE_ARRAY {
             public String[] value(String[] strings) {
                 return strings;
             }
@@ -81,7 +81,7 @@ public class Helper {
     }
 
     public enum Value {
-        IntegerValue {
+        INTEGER_VALUE {
             public Integer value(Cell cell) {
                 cell.setCellType(CellType.NUMERIC);
                 return ((Double) cell.getNumericCellValue()).intValue();
@@ -90,7 +90,7 @@ public class Helper {
             public Integer maxValue() {
                 return Integer.MAX_VALUE;
             }
-        }, DoubleValue {
+        }, DOUBLE_VALUE {
             public Double value(Cell cell) {
                 cell.setCellType(CellType.NUMERIC);
                 return cell.getNumericCellValue();
@@ -99,7 +99,7 @@ public class Helper {
             public Double maxValue() {
                 return Double.MAX_VALUE;
             }
-        }, BooleanValue {
+        }, BOOLEAN_VALUE {
             public Boolean value(Cell cell) {
                 cell.setCellType(CellType.BOOLEAN);
                 return cell.getBooleanCellValue();
@@ -108,7 +108,7 @@ public class Helper {
             public Boolean maxValue() {
                 return Boolean.TRUE;
             }
-        }, LongValue {
+        }, LONG_VALUE {
             public Long value(Cell cell) {
                 cell.setCellType(CellType.NUMERIC);
                 return ((Double) cell.getNumericCellValue()).longValue();
@@ -117,7 +117,7 @@ public class Helper {
             public Long maxValue() {
                 return Long.MAX_VALUE;
             }
-        }, StringValue {
+        }, STRING_VALUE {
             public String value(Cell cell) {
                 cell.setCellType(CellType.STRING);
                 return cell.getStringCellValue();
