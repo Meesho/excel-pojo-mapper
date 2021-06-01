@@ -1,20 +1,63 @@
 <h1 align="center">epmapper</h1>
   
-*Epmapper is a teeny Java library that provides one way mapping from Excel sheets to Java classes. In a way it lets us convert each row of the specified excel data into Java objects. Epmapper uses Apache Poi (the Java API for Microsoft Documents) under the hood to fulfill the mapping process.Epmapper provides a way to generate excel templates for complex java objects and creating java objects for data kept in excel.*
+*Epmapper is a tiny java library to map data kept in excel with java objects without writing boilerplate code to read excel & create java objects. In a way it lets us convert rows of the specified excel data into Java objects.Rows can be mapped with a key and can be fetched by key name as list of objects.Library provides way to generate standerd excel template to support mapping of complex hierarchy of objects.Epmapper uses Java Reflection & Apache Poi (the Java API for Microsoft Documents) under the hood to fulfill the mapping process.*
 
-#### Excel Template Generation:
+
+### Requirements
+
+JARs are distributed for Java8.
+
+### Get It
+
+
+### Getting Started
+
+## Build ExcelObjectMapper instance
+
+ExcelObjectMapper class provides way to set parameters required for excel template generation & mapping data with java objects using builder pattern.
 
 ```
-ExcelTemplateGenerator generator = new ExcelTemplateGenerator();
-generator.generate(rootPackage,path);
+ExcelObjectMapper mapper = ExcelObjectMapper.
+                           builder().
+                           rootPackage(root_package).
+                           fileLocation(path_of_excel).
+                           sheetName(sheet_name).
+                           build();
+```
+- root_package : Root package in project folder
+- path_of_excel : Path of excel file
+- sheet_name : Name of excel sheet
+
+## Generate Excel Template:
+
+The Generator class provides a method and it's overloaded version to generate excel template.
+
+1. Create instance of Generator class
+
+```
+Generator generator = new Generator();
+```
+2. Generate excel template
+
+```
+generator.generate(pojo,path);
+          OR
+generator.generate(excelObjectMapper,relativeClassPath);
+
 ```
 
-- rootPackage: Fully qualified class name of root pojo.
-- path: Path of file and sheet name separated with “:”
+- pojo : Fully qualified class name of root pojo.
+- path : Path of excel file and sheet name separated with “:”
+- excelObjectMapper : Instance of ExcelObjectMapper class
+- relativeClassPath : Class path of root pojo class
 
 **Note: Primitive data types are not supported, we can use wrapper classes.**
 
-### Guideline to keep data in excel:
+## Fill data in excel:
+
+Generated excel template contains pojo classes & it's fields which is used for mapping data with java objects.Data for each field in class can be filled below field name.If field is a pojo class or array of pojo class, data has to be filled below class below which it's fields are defined.
+
+Following are guideline & examples to fill data in excel template:
 
 1. The 1st Column in template is blank to keep key to fetch specific data from template. 
 2. Don’t remove auto generated header in template as it is used for mapping data with java objects.
@@ -196,3 +239,17 @@ key2|HR|&nbsp;|Recruitment|&nbsp;|114|Suraj
 &nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|END|END
 &nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|116|Shyam
 &nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|117|Akash
+
+## Map data with list of java objects:
+
+ExcelObjectMapperHelper class provides methods to pass instance of ExcelObjectMapper and fetch list of java objects by key.
+
+```
+ExcelObjectMapperHelper.setObjectMapper(excelObjectMapper);
+List<Object> data = ExcelObjectMapperHelper.getData(key);
+
+```
+
+- excelObjectMapper : Instance of ExcelObjectMapper
+- key : Name or key mapped with rows of data
+- data : List of java objects corresponding to rows in excel
