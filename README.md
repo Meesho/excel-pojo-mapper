@@ -9,6 +9,17 @@ JARs are distributed for Java8.
 
 ## Get It
 
+If you are using maven project then create lib folder under project directory.Download jar & place it in lib folder.Update dependency in pom.xml.
+
+```
+<dependency>
+  <groupId></groupID>
+  <artifactId></artifactId>
+  <scope>system</scope>
+  <version></version>
+  <systemPath>${project.basedir}/lib/</systemPath>
+</dependency>
+```
 
 ## Getting Started
 
@@ -49,7 +60,7 @@ generator.generate(excelObjectMapper,relativeClassPath);
 - pojo : Fully qualified class name of root pojo.
 - path : Path of excel file and sheet name separated with “:”
 - excelObjectMapper : Instance of ExcelObjectMapper class
-- relativeClassPath : Class path of root pojo class
+- relativeClassPath : Class path of root pojo class(excluding root package)
 
 **Note: Primitive data types are not supported, we can use wrapper classes.**
 
