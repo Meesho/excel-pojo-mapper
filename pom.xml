@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.meesho.epmapper</groupId>
-    <artifactId>epmapper</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>excel-pojo-mapper</artifactId>
+    <version>1.0</version>
     <packaging>jar</packaging>
-    <name>epmapper</name>
+    <name>excel-pojo-mapper</name>
     <description>Project to map excel data with pojo</description>
     <properties>
         <java.version>1.8</java.version>
@@ -47,6 +47,7 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.3.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

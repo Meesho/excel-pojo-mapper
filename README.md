@@ -9,15 +9,15 @@ JARs are distributed for Java8.
 
 ## Get It
 
-If you are using maven project then create lib folder under project directory.Download jar & place it in lib folder.Update dependency in pom.xml.
+If you are using maven project then create libs folder under project directory.Download jar & place it in libs folder.Update dependency in pom.xml.
 
 ```
 <dependency>
-  <groupId></groupID>
-  <artifactId></artifactId>
+  <groupId>com.meesho.epmapper</groupID>
+  <artifactId>excel-pojo-mapper</artifactId>
   <scope>system</scope>
-  <version></version>
-  <systemPath>${project.basedir}/lib/</systemPath>
+  <version>1.0-SNAPSHOT</version>
+  <systemPath>${project.basedir}/libs/excel-pojo-mapper-1.0.jar</systemPath>
 </dependency>
 ```
 
