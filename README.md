@@ -3,16 +3,16 @@
 *Epmapper is a tiny java library to map data kept in excel with java objects without writing boilerplate code to read excel & create java objects. In a way it lets us convert rows of the specified excel data into Java objects.Rows can be mapped with a key and can be fetched by key name as list of objects.Library provides way to generate standerd excel template to support mapping of complex hierarchy of objects.Epmapper uses Java Reflection & Apache Poi (the Java API for Microsoft Documents) under the hood to fulfill the mapping process.*
 
 
-### Requirements
+## Requirements
 
 JARs are distributed for Java8.
 
-### Get It
+## Get It
 
 
-### Getting Started
+## Getting Started
 
-## Build ExcelObjectMapper instance
+### Build ExcelObjectMapper instance
 
 ExcelObjectMapper class provides way to set parameters required for excel template generation & mapping data with java objects using builder pattern.
 
@@ -28,7 +28,7 @@ ExcelObjectMapper mapper = ExcelObjectMapper.
 - path_of_excel : Path of excel file
 - sheet_name : Name of excel sheet
 
-## Generate Excel Template:
+### Generate Excel Template:
 
 The Generator class provides a method and it's overloaded version to generate excel template.
 
@@ -53,7 +53,7 @@ generator.generate(excelObjectMapper,relativeClassPath);
 
 **Note: Primitive data types are not supported, we can use wrapper classes.**
 
-## Fill data in excel:
+### Fill data in excel:
 
 Generated excel template contains pojo classes & it's fields which is used for mapping data with java objects.Data for each field in class can be filled below field name.If field is a pojo class or array of pojo class, data has to be filled below class below which it's fields are defined.
 
@@ -253,3 +253,8 @@ List<Object> data = ExcelObjectMapperHelper.getData(key);
 - excelObjectMapper : Instance of ExcelObjectMapper
 - key : Name or key mapped with rows of data
 - data : List of java objects corresponding to rows in excel
+
+## Write to us:
+
+In case of any suggestion/feedback/issues, send email to ashish.k@meesho.com.
+
