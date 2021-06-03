@@ -9,8 +9,7 @@ JARs are distributed for Java8.
 
 ## Get It
 
-Excel-Pojo-Mapper is distributed in two flavours - a standard jar containing just Excel-Pojo-Mapper, and a standalone fat JAR containing Excel-Pojo-Mapper plus all its dependencies.
-If you are using maven project then create libs folder under project directory.Download jar & place it in libs folder.Update dependencies in pom.xml.
+If you are using maven project then create libs folder under project directory.<a id="raw-url" href="https://github.com/Meesho/excel-pojo-mapper/releases/download/v1.0/excel-pojo-mapper-1.0.jar">Download jar</a> & place it in libs folder.Update dependency in pom.xml.
 
 ```
 <dependency>
