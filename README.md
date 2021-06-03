@@ -1,6 +1,6 @@
-<h1 align="center">epmapper</h1>
+<h1 align="center">Excel-Pojo-Mapper</h1>
   
-*Epmapper is a tiny java library to map data kept in excel with java objects without writing boilerplate code to read excel & create java objects. In a way it lets us convert rows of the specified excel data into Java objects.Rows can be mapped with a key and can be fetched by key name as list of objects.Library provides way to generate standerd excel template to support mapping of complex hierarchy of objects.Epmapper uses Java Reflection & Apache Poi (the Java API for Microsoft Documents) under the hood to fulfill the mapping process.*
+*Excel-Pojo-Mapper is a tiny java library to map data kept in excel with java objects without writing boilerplate code to read excel & create java objects. In a way it lets us convert rows of the specified excel data into Java objects.Rows can be mapped with a key and can be fetched by key name as list of objects.Library provides way to generate standerd excel template to support mapping of complex hierarchy of objects.Epmapper uses Java Reflection & Apache Poi (the Java API for Microsoft Documents) under the hood to fulfill the mapping process.*
 
 
 ## Requirements
@@ -9,16 +9,36 @@ JARs are distributed for Java8.
 
 ## Get It
 
-If you are using maven project then create libs folder under project directory.Download jar & place it in libs folder.Update dependency in pom.xml.
+Excel-Pojo-Mapper is distributed in two flavours - a standard jar containing just Excel-Pojo-Mapper, and a standalone fat JAR containing Excel-Pojo-Mapper plus all its dependencies.
+If you are using maven project then create libs folder under project directory.Download jar & place it in libs folder.Update dependencies in pom.xml.
 
 ```
 <dependency>
-  <groupId>com.meesho.epmapper</groupID>
+  <groupId>com.meesho.epmapper</groupId>
   <artifactId>excel-pojo-mapper</artifactId>
   <scope>system</scope>
   <version>1.0-SNAPSHOT</version>
   <systemPath>${project.basedir}/libs/excel-pojo-mapper-1.0.jar</systemPath>
 </dependency>
+
+<dependency>
+  <groupId>org.apache.poi</groupId>
+  <artifactId>poi-ooxml</artifactId>
+  <version>4.0.1</version>
+</dependency>
+
+<dependency>
+   <groupId>org.apache.commons</groupId>
+   <artifactId>commons-configuration2</artifactId>
+   <version>2.7</version>
+</dependency>
+
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.20</version>
+</dependency>
+
 ```
 
 ## Getting Started
