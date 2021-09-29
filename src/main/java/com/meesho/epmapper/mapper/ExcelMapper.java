@@ -419,7 +419,7 @@ public class ExcelMapper {
             if (!isEnd(name, map)) {
                 Object[] objectArray = (Object[]) map.get(name);
                 ReflectUtil.setFieldData(field, obj, Utils.convertArrayToList(objectArray));
-            } else if (type.contains("Array")) {
+            } else if (type.contains("ARRAY")) {
                 ReflectUtil.setFieldData(field, obj, Helper.ArrayValue.valueOf(type).maxValue());
             } else {
                 ReflectUtil.setFieldData(field, obj, Helper.Value.valueOf(type).maxValue());
