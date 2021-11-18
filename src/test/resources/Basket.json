@@ -1,0 +1,78 @@
+[
+  {
+    "key1": [
+      {
+        "items": [
+          {
+            "data": [
+              {
+                "name": "abc",
+                "id": "10"
+              },
+              {
+                "name": "bcd",
+                "id": "11"
+              }
+            ],
+            "type": "super-category"
+          },
+          {
+            "data": [
+              {
+                "name": "def",
+                "id": "100",
+                "parent_name": "aaaa",
+                "parent_id": "10"
+              },
+              {
+                "name": "fgh",
+                "id": "156",
+                "description": "This is a test",
+                "parent_name": "Test ",
+                "parent_id": "23"
+              }
+            ],
+            "type": "category"
+          },
+          {
+            "data": [
+              {
+                "name": "ghi",
+                "id": "1000",
+                "parent_name": "bbb",
+                "parent_id": "100"
+              },
+              {
+                "name": "jkl",
+                "id": "1003",
+                "parent_name": "ccc",
+                "parent_id": "101"
+              }
+            ],
+            "type": "sub-category"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "default": [
+      {
+        "items": [
+          {
+            "data": [
+              {
+                "name": "random String",
+                "id": "random String",
+                "description": "random String",
+                "parent_name": "random String",
+                "parent_id": "random String"
+              }
+            ],
+            "type": "random String"
+          }
+        ]
+      }
+    ]
+  }
+]
