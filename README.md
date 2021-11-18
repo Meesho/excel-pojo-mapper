@@ -17,7 +17,7 @@ If you are using maven project then create libs folder under project directory. 
   <artifactId>excel-pojo-mapper</artifactId>
   <scope>system</scope>
   <version>1.0-SNAPSHOT</version>
-  <systemPath>${project.basedir}/libs/excel-pojo-mapper-1.0.jar</systemPath>
+  <systemPath>${project.basedir}/libs/epmapper-1.0-SNAPSHOT.jar</systemPath>
 </dependency>
 
 <dependency>
