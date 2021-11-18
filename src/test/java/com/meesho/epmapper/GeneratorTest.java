@@ -66,10 +66,4 @@ public class GeneratorTest extends BaseTest {
         deleteFile();
     }
 
-    @Test
-    public void searchTest() {
-        excelObjectMapper = builder.fileLocation(getExcelLocation(getTestFileName("SearchRequest"))).build();
-        setTestData(excelObjectMapper,"testData.pojoClasses.search.SearchRequest");
-        List<Object> data = getData();
-    }
 }

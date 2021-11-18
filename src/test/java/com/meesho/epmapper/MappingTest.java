@@ -38,12 +38,4 @@ public class MappingTest extends BaseTest {
         validate(ExcelObjectMapperHelper.getData("key1"), JsonData.PRODUCTION_JSON.getDataForKey("key1"));
     }
 
-    @Test
-    public void searchTest() {
-        excelObjectMapper = builder.fileLocation(getExcelLocation("SearchRequestTest.xlsx")).build();
-        ExcelObjectMapperHelper.setObjectMapper(excelObjectMapper);
-        List<Object> data = ExcelObjectMapperHelper.getData("Test1");
-        System.out.println(new Gson().toJson(data.get(0)));
-//        validate(ExcelObjectMapperHelper.getData("key1"), JsonData.PRODUCTION_JSON.getDataForKey("key1"));
-    }
 }
