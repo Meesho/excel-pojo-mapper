@@ -3,7 +3,6 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.meesho.epmapper</groupId>
     <artifactId>epmapper</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -14,18 +13,6 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <distributionManagement>
-        <repository>
-            <id>central</id>
-            <name>ip-172-31-32-151-releases</name>
-            <url>http://ja.internal.meeshotest.in/artifactory/lib-release</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>ip-172-31-32-151-snapshot</name>
-            <url>http://ja.internal.meeshotest.in/artifactory/lib-snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.apache.poi</groupId>
