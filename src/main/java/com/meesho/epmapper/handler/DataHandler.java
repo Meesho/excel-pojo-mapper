@@ -96,7 +96,7 @@ public class DataHandler {
             String type = Helper.fieldType(fieldType[1]);
             boolean isArrayField = Optional.of(type).filter(key -> key.contains("ARRAY")).isPresent();
             if (isArrayField) {
-                boolean isCellContentIsEnd = Optional.of(currentCell.getStringCellValue()).filter(content -> content.contains("END")).isPresent();
+                boolean isCellContentIsEnd = Optional.of(currentCell.getStringCellValue()).filter(content -> content.equals("END")).isPresent();
                 if (!isCellContentIsEnd) {
                     map.put(fieldType[0], Helper.ArrayValue.valueOf(type).value(getSplitedCellValue(currentCell, arraySplitdelimeter, "[", "]")));
                 } else {
