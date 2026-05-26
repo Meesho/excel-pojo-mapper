@@ -1,0 +1,5 @@
+{
+  "enabledPlugins": {
+    "jdtls-lsp@claude-plugins-official": true
+  }
+}
