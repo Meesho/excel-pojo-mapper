@@ -157,9 +157,9 @@ public class ExcelUtil {
 
     /**
      * @param cell      Cell from which data has to be fetched
-     * @param delimeter Delimeter to split fetched data
+     * @param delimeter Delimiter to split fetched data
      * @param remove    remove string from cell content
-     * @return Array of string after removing string not required and splited based on delimeter
+     * @return Array of string after removing string not required and split based on delimiter
      */
     public static String[] getSplitedCellValue(Cell cell, String delimeter, String... remove) {
         String filterd = null;
