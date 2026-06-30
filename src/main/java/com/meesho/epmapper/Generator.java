@@ -19,7 +19,7 @@ public class Generator {
 
     /**
      * @param rootClassName class name of root pojo
-     * @param classSet      set of class names in pojo hirerchy
+     * @param classSet      set of class names in pojo hierarchy
      * @param list          list of class info
      * @return list of class info
      */
@@ -64,7 +64,7 @@ public class Generator {
     /**
      * @param file      location of excel file
      * @param sheetName name of sheet
-     * @param classSet  class name in pojo hirerchy
+     * @param classSet  class name in pojo hierarchy
      * @param map       map of class & field
      */
     private static void createExcelTemplate(String file, String sheetName, LinkedHashSet<String> classSet, Map<String, List<String[]>> map) {

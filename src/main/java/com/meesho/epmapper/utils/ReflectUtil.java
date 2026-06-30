@@ -65,7 +65,7 @@ public final class ReflectUtil {
             field.setAccessible(true);
             field.set(o, value);
         } catch (IllegalAccessException e) {
-            throw new IllegalCastException("Unexpected cast type {" + value + "} of field" + field.getName());
+            throw new IllegalCastException("Unexpected cast type {" + value + "} of field " + field.getName());
         }
     }
 
@@ -78,7 +78,7 @@ public final class ReflectUtil {
             field.setAccessible(true);
             field.set(o, array);
         } catch (IllegalAccessException e) {
-            throw new IllegalCastException("Unexpected cast type {" + value + "} of field" + field.getName());
+            throw new IllegalCastException("Unexpected cast type {" + value + "} of field " + field.getName());
         }
     }
 }
